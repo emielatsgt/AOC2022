@@ -8,11 +8,7 @@
 import Foundation
 
 func contains(_ left: ClosedRange<Int>, _ right: ClosedRange<Int>) -> Bool {
-    return right.lowerBound >= left.lowerBound && right.upperBound <= left.upperBound
-}
-
-func overlaps(_ left: ClosedRange<Int>, _ right: ClosedRange<Int>) -> Bool {
-    return (right.lowerBound >= left.lowerBound && right.upperBound <= left.upperBound) || (right.upperBound >= left.lowerBound && right.lowerBound <= left.upperBound)
+    right.clamped(to: left) == right
 }
 
 let one = ranges
@@ -22,7 +18,7 @@ let one = ranges
 
 let two = ranges
     .reduce(0) { accu, item in
-        accu + (overlaps(item.0, item.1) ? 1 : 0)
+        accu + (item.0.overlaps(item.1) ? 1 : 0)
     }
 
 // 471
@@ -30,6 +26,3 @@ print(one)
 
 // 888
 print(two)
-
-
-
