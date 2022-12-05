@@ -536,7 +536,9 @@ let moves = lines
         return (count, source, dest)
     }
 
-let nonmoves = lines.filter { !$0.starts(with: "move") && !$0.isEmpty && !$0.starts(with: " 1") }
+let nonmoves = lines
+    .filter { !$0.starts(with: "move") && !$0.isEmpty && !$0.starts(with: " 1") }
+    .map { Array($0) }
 
 var stacks: [[Character]] = [[], [], [], [], [], [], [], [], []]
 

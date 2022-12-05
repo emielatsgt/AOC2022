@@ -9,9 +9,7 @@ import Foundation
 
 for string in nonmoves.reversed() {
     for offset in stride(from: 1, to: 34, by: 4) {
-        let char = string.count >= offset
-        ? string[string.index(string.startIndex, offsetBy: offset)]
-        : " "
+        let char = string.count >= offset ? string[offset] : " "
         
         let stackIndex = (offset - 1) / 4
         
