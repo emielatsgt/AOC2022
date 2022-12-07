@@ -45,8 +45,21 @@ func two(stacks: [[Character]], moves: [(Int, Int, Int)]) -> String {
     }
 }
 
+func time(passes: Int, _ closure: () -> Void) {
+    let begin = Date()
+    for _ in 0 ..< passes {
+        closure()
+    }
+    let end = Date()
+    print("\(passes) passes took \(end.timeIntervalSince(begin) * 1000)ms time.")
+}
+
+
+
 // TLNGFGMFN
 print(one(stacks: stacks, moves: moves))
+
+time(passes: 1000) { one(stacks: stacks, moves: moves) }
 
 // FGLQJCMBD
 print(two(stacks: stacks, moves: moves))
