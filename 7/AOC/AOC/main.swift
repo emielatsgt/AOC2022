@@ -8,13 +8,8 @@
 import Foundation
 
 func traverse(_ directory: Directory) -> [Directory] {
-    var temp: [Directory] = [directory]
-    
-    for sub in directory.subdirectories {
-        temp.append(contentsOf: traverse(sub))
-    }
-    
-    return temp
+    directory.subdirectories
+        .reduce(into: [directory]) { $0.append(contentsOf: traverse($1)) }
 }
 
 func one() -> Int {

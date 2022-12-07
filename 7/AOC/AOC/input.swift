@@ -1021,20 +1021,13 @@ func parse(_ lines: [String]) -> Directory {
         
         // cd command
         if components[safe: 0] == "$", components[safe: 1] == "cd", let name = components[safe: 2] {
-            if name == ".." {
-                currentNode = currentNode?.parent
-            } else if name == "/" {
-                currentNode = rootNode
-            } else {
-                currentNode = currentNode?.mkdir(name: name)
+            switch name {
+            case "..": currentNode = currentNode?.parent
+            case "/": currentNode = rootNode
+            default: currentNode = currentNode?.mkdir(name: name)
             }
         }
-        
-        // directory listing
-        if components[safe: 0] == "dir", let name = components[safe: 1] {
-            currentNode?.mkdir(name: name)
-        }
-        
+                
         // file listing
         if let sizeString = components[safe: 0], let size = Int(sizeString), let name = components[safe: 1] {
             currentNode?.files.append(File(name: name, size: size))
