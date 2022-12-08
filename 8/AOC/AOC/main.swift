@@ -8,7 +8,7 @@
 import Foundation
 
 func bruteForceVisibilities(_ array: [[Tree]]) {
-    for y in 0 ..< array.count {
+    DispatchQueue.concurrentPerform(iterations: array.count) { y in
         for x in 0 ..< array[y].count {
             if x == 0 || y == 0 || x == array.count - 1 || y == array[y].count - 1 {
                 array[y][x].visible = true
@@ -23,25 +23,37 @@ func bruteForceVisibilities(_ array: [[Tree]]) {
                 // Left
                 for xx in 0 ..< x {
                     let otherTree = array[y][xx]
-                    if otherTree.height >= tree.height { visibleFromLeft = false }
+                    if otherTree.height >= tree.height {
+                        visibleFromLeft = false
+                        break
+                    }
                 }
                 
                 // Right
                 for xx in x + 1 ..< array[y].count {
                     let otherTree = array[y][xx]
-                    if otherTree.height >= tree.height { visibleFromRight = false }
+                    if otherTree.height >= tree.height {
+                        visibleFromRight = false
+                        break
+                    }
                 }
                 
                 // Top
                 for yy in 0 ..< y {
                     let otherTree = array[yy][x]
-                    if otherTree.height >= tree.height { visibleFromTop = false }
+                    if otherTree.height >= tree.height {
+                        visibleFromTop = false
+                        break
+                    }
                 }
                 
                 // Bottom
                 for yy in y + 1 ..< array.count {
                     let otherTree = array[yy][x]
-                    if otherTree.height >= tree.height { visibleFromBottom = false }
+                    if otherTree.height >= tree.height {
+                        visibleFromBottom = false
+                        break
+                    }
                 }
                 
                 tree.visible = visibleFromTop || visibleFromLeft || visibleFromRight || visibleFromBottom
@@ -51,7 +63,7 @@ func bruteForceVisibilities(_ array: [[Tree]]) {
 }
 
 func bruteForceVisibleAreas(_ array: [[Tree]]) {
-    for y in 0 ..< array.count {
+    DispatchQueue.concurrentPerform(iterations: array.count) { y in
         for x in 0 ..< array[y].count {
             let tree = array[y][x]
             
@@ -93,6 +105,30 @@ func bruteForceVisibleAreas(_ array: [[Tree]]) {
     }
 }
 
+func measureOne() {
+    let array = parse(lines)
+    
+    let begin = Date()
+    for _ in 1...10 {
+        bruteForceVisibilities(array)
+    }
+    let end = Date()
+    
+    print("It took \(end.timeIntervalSince(begin) * 1000) ms for 10 iterations.")
+}
+
+func measureTwo() {
+    let array = parse(lines)
+    
+    let begin = Date()
+    for _ in 1...10 {
+        bruteForceVisibleAreas(array)
+    }
+    let end = Date()
+    
+    print("It took \(end.timeIntervalSince(begin) * 1000) ms for 10 iterations.")
+}
+
 func one() -> Int {
     let array = parse(lines)
     
@@ -114,6 +150,9 @@ func two() -> Int {
     
     return candidate?.visibleArea ?? 0
 }
+
+measureOne()
+measureTwo()
 
 // 1789
 print(one())
